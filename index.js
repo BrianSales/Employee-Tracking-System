@@ -24,7 +24,30 @@ inquirer.prompt(question)
         console.table(departments);
       })
 
+    } else if (answer.action === 'View all roles') {
+      connection.query('SELECT * FROM roles', function (err, roles) {
+        console.table(roles);
+      })
+    } else if (answer.action === 'add a role') {
+      inquirer.prompt([
+        {
+          name: 'title',
+          message: 'Enter the title:',
+          type: 'input'
+
+        },
+        {
+          name: "salary",
+          message: "What is your salary",
+          type: 'input',
+        }
+
+      ])
+        .then(answer => {
+          connection.query('insert into role (name) values(?)', [answer.department])
+        })
     }
+
 
     else if (answer.action === 'add a department') {
       inquirer.prompt([
