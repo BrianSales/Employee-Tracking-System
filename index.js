@@ -13,11 +13,12 @@ let question = [{
   name: 'action',
   type: 'list',
   choices: ["View all departments", "View all roles", "view all employees",
-    "add a department", "add a role", "add an employee", "update employee roles"]
+    "add a department", "add a role", "add an employee", "update employee roles", "end"]
 }];
 
 // Ask the question
-inquirer.prompt(question)
+function start (){
+    inquirer.prompt(question)
   .then(answer => {
     if (answer.action === "View all departments") {
       connection.query('SELECT * FROM departments', function (err, departments) {
@@ -32,7 +33,7 @@ inquirer.prompt(question)
       inquirer.prompt([
         {
           name: 'title',
-          message: 'Enter the title:',
+          message: 'Enter the job title:',
           type: 'input'
 
         },
@@ -60,7 +61,22 @@ inquirer.prompt(question)
         .then(answer => {
           connection.query('insert into departments (name) values(?)', [answer.department])
         })
-    }
+    } 
+    
+    else {
+        console.log("Goodbye")
+        connection.end();
+      }
+
+
 
 
   })
+
+}
+  // connect to the mysql server and sql database
+connection.connect((err) => {
+    if (err) throw err;
+    // run the start function after the connection is made to prompt the user
+    start();
+  });
